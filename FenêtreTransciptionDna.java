@@ -2,26 +2,13 @@ package dna.com;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import java.awt.Color;
-
-import javax.swing.JFileChooser;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.File;
-
-import javax.swing.JRadioButton;
-import javax.swing.JLabel;
-import javax.swing.JEditorPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-
-public class FenêtreTransciptionDna {
+public class FenÃªtreTransciptionDna {
 
 	private JFrame frame;
 	private JRadioButton rdbtnSaisie;
 	private JRadioButton rdbtnLire;
+	private String path;
+	public static String Builder_4 = "";
 	/**
 	 * Launch the application.
 	 */
@@ -29,7 +16,8 @@ public class FenêtreTransciptionDna {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FenêtreTransciptionDna window = new FenêtreTransciptionDna();
+					
+					FenÃªtreTransciptionDna window = new FenÃªtreTransciptionDna();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +29,7 @@ public class FenêtreTransciptionDna {
 	/**
 	 * Create the application.
 	 */
-	public FenêtreTransciptionDna() {
+	public FenÃªtreTransciptionDna() {
 		initialize();
 	}
 
@@ -51,10 +39,15 @@ public class FenêtreTransciptionDna {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(240, 240, 240));
-		frame.getContentPane().setLayout(null);
-		
+		final JTextArea textArea = new JTextArea();
+		final JTextArea BrinctextArea = new JTextArea();
+		final JTextArea ARNtextArea = new JTextArea();
+		//Jfile chooser pour choisir un fichier + appel Ã  la function Lire fichier pour faire la lecture
 		JButton btnNewButton = new JButton("Lire un fichier");
 		btnNewButton.addActionListener(new ActionListener() {
+		
+			private LireFichier lecture;
+
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("//ouvrir une arborescence.");
 				//
@@ -65,33 +58,27 @@ public class FenêtreTransciptionDna {
 			    chooser.setCurrentDirectory(f);
 			    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			    chooser.showOpenDialog(null);
+			    File curDir = chooser.getSelectedFile();			    
+			    path = curDir.getAbsolutePath();
+			    lecture = new LireFichier();
+			    String lire = lecture.Lecture(path);
+			    textArea.setText(lire);
+			   
+			   
 				}catch (Exception ee) {
 					System.out.println(ee.getMessage());
 				}
 			
-		
 			}
+			
 		});
-		btnNewButton.setBounds(74, 462, 131, 32);
-		frame.getContentPane().add(btnNewButton);
-		
-		
-		final JTextArea textArea = new JTextArea();
-		textArea.setBounds(10, 56, 439, 369);
-		frame.getContentPane().add(textArea);
-		
-		
-		final JTextArea ARNtextArea = new JTextArea();
-		ARNtextArea.setBounds(904, 56, 455, 369);
-		frame.getContentPane().add(ARNtextArea);
 		frame.setBounds(100, 100, 1385, 596);
 		
+		LireFichier lecture = new LireFichier();
+		String text = lecture.Lecture(path);
+		 System.out.println(path);
+		textArea.setText(text);
 		JButton btnNewButton_1 = new JButton("valider");
-		
-		final JTextArea BrinctextArea = new JTextArea();
-		BrinctextArea.setBounds(455, 56, 443, 369);		
-		frame.getContentPane().add(BrinctextArea);
-		
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String texte = textArea.getText();
@@ -105,37 +92,139 @@ public class FenêtreTransciptionDna {
 				
 			}	
 	});
-		
-		btnNewButton_1.setBounds(294, 462, 139, 32);
-		frame.getContentPane().add(btnNewButton_1);
-		rdbtnSaisie = new JRadioButton("Saisie à la main");
-		rdbtnSaisie.setBounds(371, 0, 200, 50);
-		frame.getContentPane().add(rdbtnSaisie);
+		rdbtnSaisie = new JRadioButton("Saisie Ã  la main");
 		
 		rdbtnLire = new JRadioButton("Lecture depuis un Fichier");
-		rdbtnLire.setBounds(848, 9, 200, 32);
-		frame.getContentPane().add(rdbtnLire);
 		
 		
-		JButton btnNewButton_2 = new JButton("Creation d'Acides aminés");
-		btnNewButton_2.setBounds(1122, 462, 151, 32);
-		frame.getContentPane().add(btnNewButton_2);
+		JButton btnNewButton_2 = new JButton("Creation d'Acides aminÃ©s");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FenetreAcidesaminÃ©s.main(null);
+				String texte3 = ARNtextArea.getText();
+				Builder_4 = Proteine.Pro(texte3);
+				System.out.println(Builder_4);
+				
+				
+				;
+				
+			}
+		});
+			
 		
 		JLabel lblArnm = new JLabel("ARNm");
-		lblArnm.setBounds(1096, 33, 46, 14);
-		frame.getContentPane().add(lblArnm);
 		
 		JLabel lblBrinComplmentaire = new JLabel("Brin Compl\u00E9mentaire");
-		lblBrinComplmentaire.setBounds(726, 33, 151, 20);
-		frame.getContentPane().add(lblBrinComplmentaire);
 		
 		JLabel lblBrin = new JLabel("Brin");
-		lblBrin.setBounds(185, 36, 46, 14);
-		frame.getContentPane().add(lblBrin);
 		
 		JButton btnAnnimation = new JButton("Annimations");
-		btnAnnimation.setBounds(883, 462, 161, 32);
-		frame.getContentPane().add(btnAnnimation);
+		btnAnnimation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				animation ani = new animation();
+				try {
+					ani.main(null);
+				} catch (InterruptedException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+	
+						 
+				
+			
+			}	
+		});
+		JScrollPane scrollPane = new JScrollPane();
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(185)
+							.addComponent(lblBrin, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+							.addGap(140)
+							.addComponent(rdbtnSaisie, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+							.addGap(155)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblBrinComplmentaire, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(122)
+									.addComponent(rdbtnLire, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
+							.addGap(48)
+							.addComponent(lblArnm, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(74)
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+							.addGap(83)
+							.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
+							.addGap(458)
+							.addComponent(btnAnnimation, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
+							.addGap(79)
+							.addComponent(btnNewButton_2))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+							.addGap(18)
+							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 431, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)))
+					.addGap(15))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(36)
+							.addComponent(lblBrin))
+						.addComponent(rdbtnSaisie, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(9)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(24)
+									.addComponent(lblBrinComplmentaire, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+								.addComponent(rdbtnLire, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(33)
+							.addComponent(lblArnm)))
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(18)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+							.addGap(18)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)))))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnAnnimation, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+					.addGap(6))
+		);
+		
+		
+		scrollPane_2.setViewportView(ARNtextArea);
+		
+		
+		scrollPane_1.setViewportView(BrinctextArea);
+		
+		
+		scrollPane.setViewportView(textArea);
+		frame.getContentPane().setLayout(groupLayout);
 		
 		
 		
@@ -144,3 +233,5 @@ public class FenêtreTransciptionDna {
 		
 	}
 }
+
+
